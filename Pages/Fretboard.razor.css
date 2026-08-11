@@ -1,0 +1,299 @@
+.app {
+    background: #202020;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0 0 20px 0;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+    .controls label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .controls select {
+        min-width: 120px;
+        min-height: 40px;
+        font-size: 16px;
+        padding: 5px 8px;
+    }
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 15px;
+}
+
+    .legend span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .legend .note {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+    }
+
+.fretboard-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 2px solid #bbb;
+    background: #754725;
+}
+
+.fretboard {
+    display: grid;
+    grid-template-columns: 78px repeat(13, minmax(75px, 1fr));
+    grid-template-rows: 38px repeat(6, 70px);
+    min-width: 1100px;
+}
+
+.fret-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.string-name {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+    .string-name small {
+        margin-left: 5px;
+    }
+
+.fret-cell {
+    position: relative;
+    border-right: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.open-fret {
+    border-right: 3px solid gold;
+}
+
+.string-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: #ddd;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.degree {
+    position: relative;
+    z-index: 2;
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    border: 1px solid rgba(255,255,255,.6);
+    user-select: none;
+}
+
+.root {
+    background: #f01818;
+}
+
+.degree.root {
+    width: 43px;
+    height: 43px;
+    border: 2px solid white;
+}
+
+.second {
+    background: #6650c8;
+}
+
+.flat3 {
+    background: #ff9800;
+}
+
+.third {
+    background: #ffd000;
+    color: #111;
+}
+
+.fourth {
+    background: #089316;
+}
+
+.flat5 {
+    background: #555;
+}
+
+.fifth {
+    background: #2196f3;
+}
+
+.sixth {
+    background: #ee1680;
+}
+
+.flat7 {
+    background: #8d62cf;
+}
+
+.seventh {
+    background: #5aa0a6;
+}
+
+.other {
+    background: #666;
+}
+
+.hint {
+    margin-top: 12px;
+    color: #ccc;
+    font-size: .9rem;
+}
+
+/* iPhone 縦 */
+@media (max-width: 700px) {
+
+    .app {
+        min-height: 100dvh;
+        padding: 8px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+        margin-bottom: 10px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+        .controls label {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 3px;
+            font-size: .85rem;
+        }
+
+        .controls select {
+            width: 100%;
+            min-width: 0;
+            min-height: 44px;
+            font-size: 16px;
+        }
+
+    .legend {
+        gap: 10px;
+        font-size: .85rem;
+        margin-bottom: 8px;
+    }
+
+    .fretboard-scroll {
+        width: 100%;
+        overscroll-behavior-x: contain;
+    }
+
+    .fretboard {
+        grid-template-columns: 65px repeat(13, 70px);
+        grid-template-rows: 32px repeat(6, 58px);
+        min-width: 975px;
+    }
+
+    .degree {
+        width: 35px;
+        height: 35px;
+        font-size: .9rem;
+    }
+
+        .degree.root {
+            width: 39px;
+            height: 39px;
+        }
+}
+
+/* iPhone 横 */
+@media (orientation: landscape) and (max-height: 550px) {
+
+    .app {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+
+    .controls {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 7px;
+        margin-bottom: 5px;
+    }
+
+        .controls label {
+            flex-direction: row;
+            align-items: center;
+            white-space: nowrap;
+            font-size: .78rem;
+        }
+
+        .controls select {
+            min-height: 34px;
+            width: auto;
+            min-width: 95px;
+            font-size: 14px;
+            padding: 2px 5px;
+        }
+
+    .legend,
+    .hint {
+        display: none;
+    }
+
+    .fretboard {
+        grid-template-columns: 65px repeat(13, 68px);
+        grid-template-rows: 25px repeat(6, 45px);
+        min-width: 950px;
+    }
+
+    .degree {
+        width: 32px;
+        height: 32px;
+        font-size: .8rem;
+    }
+
+        .degree.root {
+            width: 35px;
+            height: 35px;
+        }
+}

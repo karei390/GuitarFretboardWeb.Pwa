@@ -1,0 +1,287 @@
+﻿@page "/"
+@page "/fretboard"
+
+
+<PageTitle>Guitar Fretboard</PageTitle>
+
+<div class="app">
+
+    <h1>Guitar Fretboard</h1>
+
+    <div class="controls">
+
+        <label>
+            Root
+            <select @bind="Root">
+                @foreach (var note in RootNames)
+                {
+                    <option value="@note">@note</option>
+                }
+            </select>
+        </label>
+
+        <label>
+            表示
+            <select @bind="Mode">
+                <option value="Scale">スケール</option>
+                <option value="Chord">コードトーン</option>
+                <option value="All">全音</option>
+            </select>
+        </label>
+
+        @if (Mode == "Scale")
+        {
+            <label>
+                スケール
+                <select @bind="Scale">
+                    <option value="Major">メジャー</option>
+                    <option value="NaturalMinor">ナチュラルマイナー</option>
+                    <option value="MajorPentatonic">メジャーペンタ</option>
+                    <option value="MinorPentatonic">マイナーペンタ</option>
+                    <option value="Dorian">ドリアン</option>
+                    <option value="Mixolydian">ミクソリディアン</option>
+                    <option value="Blues">ブルース</option>
+                </select>
+            </label>
+        }
+
+        @if (Mode == "Chord")
+        {
+            <label>
+                コード
+                <select @bind="Chord">
+                    <option value="Major">Major</option>
+                    <option value="Minor">Minor</option>
+                    <option value="7">7</option>
+                    <option value="Maj7">Maj7</option>
+                    <option value="m7">m7</option>
+                    <option value="dim">dim</option>
+                    <option value="sus4">sus4</option>
+                </select>
+            </label>
+        }
+
+    </div>
+
+    <div class="legend">
+        <span><i class="note root"></i>1</span>
+        <span><i class="note second"></i>2</span>
+        <span><i class="note flat3"></i>♭3</span>
+        <span><i class="note third"></i>3</span>
+        <span><i class="note fourth"></i>4</span>
+        <span><i class="note fifth"></i>5</span>
+        <span><i class="note flat7"></i>♭7</span>
+    </div>
+
+    <div class="fretboard-scroll">
+
+        <div class="fretboard">
+
+            <div class="fret-header string-name"></div>
+
+            @for (int fret = 0; fret <= 12; fret++)
+            {
+                <div class="fret-header">@fret</div>
+            }
+
+            @for (int stringIndex = 0; stringIndex < 6; stringIndex++)
+            {
+                int currentString = stringIndex;
+
+                <div class="string-name">
+                    @(currentString + 1)弦
+                    <small>(@OpenStringNames[currentString])</small>
+                </div>
+
+                @for (int fret = 0; fret <= 12; fret++)
+                {
+                    int currentFret = fret;
+
+                    int note =
+                        (OpenStrings[currentString] + currentFret) % 12;
+
+                    int interval =
+                        (note - RootIndex + 12) % 12;
+
+                    bool visible =
+                        VisibleIntervals.Contains(interval);
+
+                    <div class="fret-cell @(currentFret == 0 ? "open-fret" : "")">
+
+                        <div class="string-line"
+                             style="height:@GetStringThickness(currentString)px">
+                        </div>
+
+                        @if (visible)
+                        {
+                            <div class="degree @GetDegreeClass(interval)"
+                                 title="@GetNoteName(note) / @Degrees[interval]">
+
+                                @Degrees[interval]
+
+                            </div>
+                        }
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+
+    <div class="hint">
+        丸印にマウスを乗せると音名と度数が表示されます。
+        iPhoneでは横向きがおすすめです。
+    </div>
+
+</div>
+
+@code {
+
+    private string Root { get; set; } = "C";
+    private string Mode { get; set; } = "Scale";
+    private string Scale { get; set; } = "Major";
+    private string Chord { get; set; } = "Major";
+
+    private readonly string[] RootNames =
+    {
+        "C", "C#", "D", "Eb", "E", "F",
+        "F#", "G", "Ab", "A", "Bb", "B"
+    };
+
+    private readonly string[] ChromaticNames =
+    {
+        "C", "C#", "D", "Eb", "E", "F",
+        "F#", "G", "Ab", "A", "Bb", "B"
+    };
+
+    private readonly string[] Degrees =
+    {
+        "1", "♭2", "2", "♭3",
+        "3", "4", "♭5", "5",
+        "♭6", "6", "♭7", "7"
+    };
+
+    // 1弦 → 6弦
+    private readonly int[] OpenStrings =
+    {
+        4, 11, 7, 2, 9, 4
+    };
+
+    private readonly string[] OpenStringNames =
+    {
+        "E", "B", "G", "D", "A", "E"
+    };
+
+    private int RootIndex => Root switch
+    {
+        "C" => 0,
+        "C#" => 1,
+        "D" => 2,
+        "Eb" => 3,
+        "E" => 4,
+        "F" => 5,
+        "F#" => 6,
+        "G" => 7,
+        "Ab" => 8,
+        "A" => 9,
+        "Bb" => 10,
+        "B" => 11,
+        _ => 0
+    };
+
+    private HashSet<int> VisibleIntervals
+    {
+        get
+        {
+            if (Mode == "All")
+            {
+                return new()
+                {
+                    0,1,2,3,4,5,
+                    6,7,8,9,10,11
+                };
+            }
+
+            if (Mode == "Chord")
+            {
+                return Chord switch
+                {
+                    "Major" => new() { 0, 4, 7 },
+                    "Minor" => new() { 0, 3, 7 },
+                    "7" => new() { 0, 4, 7, 10 },
+                    "Maj7" => new() { 0, 4, 7, 11 },
+                    "m7" => new() { 0, 3, 7, 10 },
+                    "dim" => new() { 0, 3, 6 },
+                    "sus4" => new() { 0, 5, 7 },
+                    _ => new() { 0, 4, 7 }
+                };
+            }
+
+            return Scale switch
+            {
+                "Major" =>
+                    new() { 0, 2, 4, 5, 7, 9, 11 },
+
+                "NaturalMinor" =>
+                    new() { 0, 2, 3, 5, 7, 8, 10 },
+
+                "MajorPentatonic" =>
+                    new() { 0, 2, 4, 7, 9 },
+
+                "MinorPentatonic" =>
+                    new() { 0, 3, 5, 7, 10 },
+
+                "Dorian" =>
+                    new() { 0, 2, 3, 5, 7, 9, 10 },
+
+                "Mixolydian" =>
+                    new() { 0, 2, 4, 5, 7, 9, 10 },
+
+                "Blues" =>
+                    new() { 0, 3, 5, 6, 7, 10 },
+
+                _ =>
+                    new() { 0, 2, 4, 5, 7, 9, 11 }
+            };
+        }
+    }
+
+    private string GetDegreeClass(int interval)
+    {
+        return interval switch
+        {
+            0 => "root",
+            2 => "second",
+            3 => "flat3",
+            4 => "third",
+            5 => "fourth",
+            6 => "flat5",
+            7 => "fifth",
+            9 => "sixth",
+            10 => "flat7",
+            11 => "seventh",
+            _ => "other"
+        };
+    }
+
+    private string GetNoteName(int note)
+    {
+        return ChromaticNames[note];
+    }
+
+    private double GetStringThickness(int index)
+    {
+        return index switch
+        {
+            0 => 1.0,
+            1 => 1.3,
+            2 => 1.6,
+            3 => 2.0,
+            4 => 2.5,
+            5 => 3.0,
+            _ => 1.0
+        };
+    }
+}
