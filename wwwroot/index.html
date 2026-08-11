@@ -5,15 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GuitarFretboardWeb.Pwa</title>
+
     <base href="/GuitarFretboardWeb.Pwa/" />
+
     <link rel="preload" id="webassembly" />
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="GuitarFretboardWeb.Pwa.styles.css" rel="stylesheet" />
-    <link href="manifest.webmanifest" rel="manifest" />
-    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <link rel="stylesheet" href="/GuitarFretboardWeb.Pwa/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/GuitarFretboardWeb.Pwa/css/app.css" />
+    <link rel="icon" type="image/png" href="/GuitarFretboardWeb.Pwa/favicon.png" />
+    <link href="/GuitarFretboardWeb.Pwa/GuitarFretboardWeb.Pwa.styles.css" rel="stylesheet" />
+    <link href="/GuitarFretboardWeb.Pwa/manifest.webmanifest" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/GuitarFretboardWeb.Pwa/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/GuitarFretboardWeb.Pwa/icon-192.png" />
     <script type="importmap"></script>
 </head>
 
@@ -28,11 +30,18 @@
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
+        <a href="/GuitarFretboardWeb.Pwa/" class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+
+    <script src="/GuitarFretboardWeb.Pwa/_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+
+    <script>
+        navigator.serviceWorker.register(
+            '/GuitarFretboardWeb.Pwa/service-worker.js',
+            { updateViaCache: 'none' }
+        );
+    </script>
 </body>
 
 </html>
