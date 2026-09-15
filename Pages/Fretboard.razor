@@ -55,6 +55,15 @@
                     <option value="7">7</option>
                     <option value="Maj7">Maj7</option>
                     <option value="m7">m7</option>
+                    <option value="9th">9th</option>
+                    <option value="11th">11th</option>
+                    <option value="13th">13th</option>
+                    <option value="m9">m9</option>
+                    <option value="m11">m11</option>
+                    <option value="m13">m13</option>
+                    <option value="M9">M9</option>
+                    <option value="M11">M11</option>
+                    <option value="M13">M13</option>
                     <option value="dim">dim</option>
                     <option value="sus4">sus4</option>
                 </select>
@@ -65,11 +74,29 @@
 
     <div class="legend">
         <span><i class="note root"></i>1</span>
-        <span><i class="note second"></i>2</span>
+        @if (Mode == "Chord")
+        {
+            <span><i class="note second"></i>9</span>
+        }
+        else
+        {
+            <span><i class="note second"></i>2</span>
+        }
         <span><i class="note flat3"></i>♭3</span>
         <span><i class="note third"></i>3</span>
-        <span><i class="note fourth"></i>4</span>
+        @if (Mode == "Chord")
+        {
+            <span><i class="note fourth"></i>11</span>
+        }
+        else
+        {
+            <span><i class="note fourth"></i>4</span>
+        }
         <span><i class="note fifth"></i>5</span>
+        @if (Mode == "Chord")
+        {
+            <span><i class="note sixth"></i>13</span>
+        }
         <span><i class="note flat7"></i>♭7</span>
     </div>
 
@@ -115,9 +142,9 @@
                         @if (visible)
                         {
                             <div class="degree @GetDegreeClass(interval)"
-                                 title="@GetNoteName(note) / @Degrees[interval]">
+                                 title="@GetNoteName(note) / @GetDegreeLabel(interval)">
 
-                                @Degrees[interval]
+                                @GetDegreeLabel(interval)
 
                             </div>
                         }
@@ -146,13 +173,13 @@
 
     private readonly string[] RootNames =
     {
-        "C", "C#", "D", "Eb", "E", "F",
+        "C", "Db", "D", "Eb", "E", "F",
         "F#", "G", "Ab", "A", "Bb", "B"
     };
 
     private readonly string[] ChromaticNames =
     {
-        "C", "C#", "D", "Eb", "E", "F",
+        "C", "Db", "D", "Eb", "E", "F",
         "F#", "G", "Ab", "A", "Bb", "B"
     };
 
@@ -177,7 +204,7 @@
     private int RootIndex => Root switch
     {
         "C" => 0,
-        "C#" => 1,
+        "Db" => 1,
         "D" => 2,
         "Eb" => 3,
         "E" => 4,
@@ -213,6 +240,15 @@
                     "7" => new() { 0, 4, 7, 10 },
                     "Maj7" => new() { 0, 4, 7, 11 },
                     "m7" => new() { 0, 3, 7, 10 },
+                    "9th" => new() { 0, 2, 4, 7, 10 },
+                    "11th" => new() { 0, 2, 4, 5, 7, 10 },
+                    "13th" => new() { 0, 2, 4, 5, 7, 9, 10 },
+                    "m9" => new() { 0, 2, 3, 7, 10 },
+                    "m11" => new() { 0, 2, 3, 5, 7, 10 },
+                    "m13" => new() { 0, 2, 3, 5, 7, 9, 10 },
+                    "M9" => new() { 0, 2, 4, 7, 11 },
+                    "M11" => new() { 0, 2, 4, 5, 7, 11 },
+                    "M13" => new() { 0, 2, 4, 5, 7, 9, 11 },
                     "dim" => new() { 0, 3, 6 },
                     "sus4" => new() { 0, 5, 7 },
                     _ => new() { 0, 4, 7 }
@@ -246,6 +282,23 @@
                     new() { 0, 2, 4, 5, 7, 9, 11 }
             };
         }
+    }
+
+
+    private string GetDegreeLabel(int interval)
+    {
+        if (Mode == "Chord")
+        {
+            return interval switch
+            {
+                2 => "9",
+                5 => "11",
+                9 => "13",
+                _ => Degrees[interval]
+            };
+        }
+
+        return Degrees[interval];
     }
 
     private string GetDegreeClass(int interval)
