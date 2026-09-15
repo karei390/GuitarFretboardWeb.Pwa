@@ -1,4 +1,4 @@
-﻿name: Deploy Blazor WASM to GitHub Pages
+name: Deploy Blazor WASM to GitHub Pages
 
 on:
   push:
@@ -33,6 +33,8 @@ jobs:
 
       - name: Prepare GitHub Pages
         run: |
+          # The app runs at / locally, but GitHub Pages hosts it below /<repository-name>/.
+          sed -i 's#<base href="/" />#<base href="/GuitarFretboardWeb.Pwa/" />#' release/wwwroot/index.html
           touch release/wwwroot/.nojekyll
 
       - name: Setup Pages
